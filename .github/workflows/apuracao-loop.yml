@@ -1,0 +1,59 @@
+# Plano que não depende do agendamento do GitHub: roda em laço por ~5h45, consulta o TSE a cada 60 s
+# e se reinicia sozinho (workflow_dispatch pelo token do próprio fluxo). Só grava no repositório quando
+# os dados mudaram (no máximo a cada 6 min, para ficar abaixo do limite de ~10 publicações por hora do GitHub Pages). Antes das 17h de 25/10 o coletor NÃO consulta o TSE.
+name: apuracao-loop
+on:
+  workflow_dispatch:
+    inputs:
+      fonte:
+        description: 'oficial ou simulado (teste)'
+        default: 'oficial'
+  push:
+    paths: ['.github/workflows/apuracao-loop.yml']
+concurrency:
+  group: apuracao-loop
+  cancel-in-progress: true
+permissions:
+  contents: write
+  actions: write
+jobs:
+  laco:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      FONTE: ${{ github.event.inputs.fonte || 'oficial' }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Coletar em laço
+        run: |
+          git config user.name "coletor"
+          git config user.email "coletor@users.noreply.github.com"
+          fim=$(( $(date +%s) + 345*60 ))
+          ultimo=0
+          while [ "$(date +%s)" -lt "$fim" ]; do
+            node coletor/coletor.mjs --fonte="$FONTE" --uma-vez --saida=../site-v4/apuracao.json || true
+            novo=$(grep -v coletadoEm site-v4/apuracao.json | md5sum)
+            velho=$(git show HEAD:site-v4/apuracao.json | grep -v coletadoEm | md5sum)
+            agora=$(date +%s)
+            if [ "$novo" != "$velho" ] && [ $((agora - ultimo)) -ge 360 ]; then
+              cp site-v4/apuracao.json /tmp/apuracao.novo.json
+              git fetch -q origin main
+              git reset -q --hard origin/main
+              cp /tmp/apuracao.novo.json site-v4/apuracao.json
+              git add site-v4/apuracao.json
+              git commit -q -m "apuracao: atualização automática (laço)" || true
+              if git push -q; then ultimo=$agora; fi
+            fi
+            sleep 60
+          done
+      - name: Reiniciar
+        if: ${{ always() }}
+        run: |
+          # continua até a madrugada de 26/10 (UTC 04h); depois para
+          if [ "$(date -u +%s)" -lt "$(date -u -d '2026-10-26 04:00' +%s)" ]; then
+            gh workflow run apuracao-loop.yml -f fonte="$FONTE"
+          fi

@@ -1,0 +1,38 @@
+# Busca a apuração do TSE e grava site-v4/apuracao.json (o site lê esse arquivo estático).
+# Agendado a cada 5 min (o mínimo do GitHub). Antes das 17h de 25/10 o coletor NÃO consulta o TSE.
+name: apuracao
+on:
+  push:
+    paths: ['.github/workflows/apuracao.yml']
+  schedule:
+    - cron: '3-58/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      fonte:
+        description: 'oficial ou simulado (teste)'
+        default: 'oficial'
+concurrency:
+  group: apuracao
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Coletar
+        run: node coletor/coletor.mjs --fonte=${{ github.event.inputs.fonte || 'oficial' }} --uma-vez --saida=../site-v4/apuracao.json
+      - name: Publicar
+        run: |
+          git config user.name "coletor"
+          git config user.email "coletor@users.noreply.github.com"
+          git add site-v4/apuracao.json
+          git diff --cached --quiet && exit 0
+          git commit -m "apuracao: atualização automática"
+          git pull --rebase -q
+          git push -q
