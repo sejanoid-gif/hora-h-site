@@ -3,7 +3,7 @@
  "fonte": "TSE",
  "ambiente": "oficial",
  "geradoTseData": "25/10/2026",
- "geradoTseHora": "23:22:22",
+ "geradoTseHora": "23:27:02",
  "secoesTotalizadasPct": 100,
  "secoesTotal": 499248,
  "secoesTotalizadas": 499248,
@@ -16,7 +16,7 @@
    "votos": 59826041,
    "votosTexto": "59826041",
    "pct": 48.214817116,
-   "situacao": "",
+   "situacao": "Não eleito",
    "situacaoCandidatura": "Válido",
    "eleito": false
   },
@@ -26,9 +26,9 @@
    "votos": 64256232,
    "votosTexto": "64256232",
    "pct": 51.785182884,
-   "situacao": "",
+   "situacao": "Eleito",
    "situacaoCandidatura": "Válido",
-   "eleito": false
+   "eleito": true
   }
  ],
  "numeros": [
@@ -415,5 +415,5 @@
    }
   }
  ],
- "coletadoEm": "2026-10-26T02:23:54.349Z"
+ "coletadoEm": "2026-10-26T02:30:01.295Z"
 }
