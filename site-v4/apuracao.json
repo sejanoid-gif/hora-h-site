@@ -3,19 +3,19 @@
  "fonte": "TSE",
  "ambiente": "oficial",
  "geradoTseData": "25/10/2026",
- "geradoTseHora": "22:33:05",
- "secoesTotalizadasPct": 99.996394577,
+ "geradoTseHora": "22:39:21",
+ "secoesTotalizadasPct": 99.998597891,
  "secoesTotal": 499248,
- "secoesTotalizadas": 499230,
- "votosTotais": 128232055,
- "votosValidos": 124078374,
+ "secoesTotalizadas": 499241,
+ "votosTotais": 128234368,
+ "votosValidos": 124080612,
  "candidatos": [
   {
    "numero": "22",
    "nome": "FLAVIO BOLSONARO",
-   "votos": 59824860,
-   "votosTexto": "59824860",
-   "pct": 48.215380385,
+   "votos": 59825488,
+   "votosTexto": "59825488",
+   "pct": 48.215016863,
    "situacao": "",
    "situacaoCandidatura": "Válido",
    "eleito": false
@@ -23,9 +23,9 @@
   {
    "numero": "13",
    "nome": "LULA",
-   "votos": 64253514,
-   "votosTexto": "64253514",
-   "pct": 51.784619615,
+   "votos": 64255124,
+   "votosTexto": "64255124",
+   "pct": 51.784983137,
    "situacao": "",
    "situacaoCandidatura": "Válido",
    "eleito": false
@@ -206,16 +206,16 @@
   },
   {
    "uf": "MG",
-   "secoesPct": 99.967346625,
+   "secoesPct": 99.992316853,
    "secoes": 52062,
    "eleitorado": 16372144,
    "votos": {
-    "13": 6348667,
-    "22": 6240624
+    "13": 6350579,
+    "22": 6241400
    },
    "pct": {
-    "13": 50.42910677,
-    "22": 49.57089323
+    "13": 50.433525977,
+    "22": 49.566474023
    }
   },
   {
@@ -415,5 +415,5 @@
    }
   }
  ],
- "coletadoEm": "2026-10-26T01:34:16.335Z"
+ "coletadoEm": "2026-10-26T01:40:19.762Z"
 }
